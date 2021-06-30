@@ -10,11 +10,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final List<Map> myFolder = List.generate(
-      6,
-      (index) => {
-            "id": index,
-            "name": "Folder Folder  $index"
-          }).toList();
+      6, (index) => {"id": index, "name": "Folder Folder  $index"}).toList();
 
   @override
   Widget build(BuildContext context) {
@@ -379,9 +375,9 @@ class _HomePageState extends State<HomePage> {
                                                                       .circular(
                                                                           20),
                                                               child: Center(
-                                                                child: Image
-                                                                    .network(
-                                                                  'https://pngimg.com/uploads/folder/folder_PNG100450.png',
+                                                                child:
+                                                                    Image.asset(
+                                                                  'images/icons/folder.png',
                                                                   width: MediaQuery.of(
                                                                               context)
                                                                           .size
@@ -437,6 +433,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
+              // Add note button
             ],
           ),
         ),

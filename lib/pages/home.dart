@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:fab_circular_menu/fab_circular_menu.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
-
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -11,6 +11,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final List<Map> myFolder = List.generate(
       6, (index) => {"id": index, "name": "Folder Folder  $index"}).toList();
+
+  final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -142,174 +144,202 @@ class _HomePageState extends State<HomePage> {
                                         itemBuilder: (context, index) {
                                           if (index.isEven) {
                                             return Container(
-                                              child: Card(
-                                                elevation: 3,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                ),
-                                                shadowColor: Color(0xFF39A2DB),
-                                                child: Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                    horizontal: 8,
-                                                    vertical: 20,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  Navigator.pushNamed(
+                                                      context, '/note');
+                                                },
+                                                child: Card(
+                                                  elevation: 3,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
                                                   ),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      // title
-                                                      Container(
-                                                        height: 45,
-                                                        child: Text(
-                                                          'Reminder Reminder Reminder Reminder Reminder',
-                                                          style: TextStyle(
-                                                            fontSize: 20,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                        ),
-                                                      ),
-                                                      // desc
-                                                      Padding(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                vertical: 10),
-                                                        child: Text(
-                                                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse aliquet id massa nec placerat. Etiam vitae dui vel sapien scelerisque dapibus sed ut quam. Sed elementum libero vel ex fringilla cursus. Nulla sagittis, ligula in ultrices tristique, neque enim semper purus, eu placerat mauris ante eu nisi. Pellentesque accumsan ex massa, id hendrerit justo sodales sit amet. Praesent porta a libero at tempus. Cras at pulvinar nibh. Aliquam ac congue felis. ',
-                                                          maxLines: 7,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                            fontSize: 14,
+                                                  shadowColor:
+                                                      Color(0xFF39A2DB),
+                                                  child: Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 20,
+                                                    ),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        // title
+                                                        Container(
+                                                          height: 45,
+                                                          child: Text(
+                                                            'Reminder Reminder Reminder Reminder Reminder',
+                                                            style: TextStyle(
+                                                              fontSize: 20,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                            maxLines: 2,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
                                                           ),
                                                         ),
-                                                      ),
-                                                      // date and categories
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                top: 9.5),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Text(
-                                                              '21 Jan',
-                                                              style: TextStyle(
-                                                                color:
-                                                                    Colors.grey,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
+                                                        // desc
+                                                        Padding(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  vertical: 10),
+                                                          child: Text(
+                                                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse aliquet id massa nec placerat. Etiam vitae dui vel sapien scelerisque dapibus sed ut quam. Sed elementum libero vel ex fringilla cursus. Nulla sagittis, ligula in ultrices tristique, neque enim semper purus, eu placerat mauris ante eu nisi. Pellentesque accumsan ex massa, id hendrerit justo sodales sit amet. Praesent porta a libero at tempus. Cras at pulvinar nibh. Aliquam ac congue felis. ',
+                                                            maxLines: 7,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: TextStyle(
+                                                              fontSize: 14,
                                                             ),
-                                                            Text(
-                                                              'My Targets',
-                                                              style: TextStyle(
-                                                                color:
-                                                                    Colors.grey,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                          ],
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                        // date and categories
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  top: 9.5),
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                '21 Jan',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                'My Targets',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ),
                                             );
                                           } else {
                                             return Container(
-                                              child: Card(
-                                                elevation: 3,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                ),
-                                                shadowColor: Color(0xFF39A2DB),
-                                                child: Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                    horizontal: 8,
-                                                    vertical: 20,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  Navigator.pushNamed(
+                                                      context, '/note');
+                                                },
+                                                child: Card(
+                                                  elevation: 3,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
                                                   ),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      // title
-                                                      Container(
-                                                        height: 45,
-                                                        child: Text(
-                                                          'Reminder Reminder Reminder',
-                                                          style: TextStyle(
-                                                            fontSize: 20,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                        ),
-                                                      ),
-                                                      // desc
-                                                      Padding(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                vertical: 10),
-                                                        child: Text(
-                                                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse aliquet id massa nec placerat. Etiam vitae dui vel sapien scelerisque dapibus sed ut quam. Sed elementum libero vel ex fringilla cursus. Nulla sagittis, ligula in ultrices tristique, neque enim semper purus, eu placerat mauris ante eu nisi. Pellentesque accumsan ex massa, id hendrerit justo sodales sit amet. Praesent porta a libero at tempus. Cras at pulvinar nibh. Aliquam ac congue felis. ',
-                                                          maxLines: 5,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                            fontSize: 14,
+                                                  shadowColor:
+                                                      Color(0xFF39A2DB),
+                                                  child: Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 20,
+                                                    ),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        // title
+                                                        Container(
+                                                          height: 45,
+                                                          child: Text(
+                                                            'Reminder Reminder Reminder',
+                                                            style: TextStyle(
+                                                              fontSize: 20,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                            maxLines: 2,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
                                                           ),
                                                         ),
-                                                      ),
-                                                      // date and categories
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                top: 5.5),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Text(
-                                                              '21 Jan',
-                                                              style: TextStyle(
-                                                                color:
-                                                                    Colors.grey,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
+                                                        // desc
+                                                        Padding(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  vertical: 10),
+                                                          child: Text(
+                                                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse aliquet id massa nec placerat. Etiam vitae dui vel sapien scelerisque dapibus sed ut quam. Sed elementum libero vel ex fringilla cursus. Nulla sagittis, ligula in ultrices tristique, neque enim semper purus, eu placerat mauris ante eu nisi. Pellentesque accumsan ex massa, id hendrerit justo sodales sit amet. Praesent porta a libero at tempus. Cras at pulvinar nibh. Aliquam ac congue felis. ',
+                                                            maxLines: 5,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: TextStyle(
+                                                              fontSize: 14,
                                                             ),
-                                                            Text(
-                                                              'My Targets',
-                                                              style: TextStyle(
-                                                                color:
-                                                                    Colors.grey,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                          ],
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                        // date and categories
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  top: 5.5),
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                '21 Jan',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                'My Targets',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -433,9 +463,86 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
+
               // Add note button
             ],
           ),
+        ),
+      ),
+      floatingActionButton: Builder(
+        builder: (context) => FabCircularMenu(
+          key: fabKey,
+          // Cannot be `Alignment.center`
+          alignment: Alignment.bottomRight,
+          ringColor: Color(0xFFA2DBFA),
+          // ringColor: Colors.transparent,
+          ringDiameter: 300.0,
+          ringWidth: 80.0,
+          fabSize: 64.0,
+          fabElevation: 30.0,
+          fabIconBorder: CircleBorder(),
+          // Also can use specific color based on wether
+          // the menu is open or not:
+          // fabOpenColor: Colors.white,
+          // fabCloseColor: Colors.white
+          // These properties take precedence over fabColor
+          fabColor: Color(0xFF39A2DB),
+          fabOpenIcon: Icon(Icons.menu, color: Colors.white),
+          fabCloseIcon: Icon(Icons.close, color: Colors.white),
+          fabMargin: const EdgeInsets.all(16.0),
+          animationDuration: const Duration(milliseconds: 800),
+          animationCurve: Curves.easeInOutCirc,
+          // onDisplayChange: (isOpen) {
+          //   _showSnackBar(context, "The menu is ${isOpen ? "open" : "closed"}");
+          // },
+          children: <Widget>[
+            RawMaterialButton(
+              fillColor: Color(0xFF39A2DB),
+              constraints: BoxConstraints(
+                minHeight: 65,
+                minWidth: 65,
+              ),
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('You '),
+                  ),
+                );
+              },
+              shape: CircleBorder(),
+              padding: const EdgeInsets.all(0.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(Icons.add, color: Colors.white), // icon
+                  Text("Folder", style: TextStyle(color: Colors.white)), // text
+                ],
+              ),
+            ),
+            RawMaterialButton(
+              fillColor: Color(0xFF39A2DB),
+              constraints: BoxConstraints(
+                minHeight: 65,
+                minWidth: 65,
+              ),
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('You pressed buy1'),
+                  ),
+                );
+              },
+              shape: CircleBorder(),
+              padding: const EdgeInsets.all(0.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(Icons.add, color: Colors.white), // icon
+                  Text("Note", style: TextStyle(color: Colors.white)), // text
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

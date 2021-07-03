@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_noted_app/pages/home.dart';
 import 'package:flutter_noted_app/pages/auth/login.dart';
 import 'package:flutter_noted_app/pages/auth/register.dart';
+import 'package:flutter_noted_app/pages/notes/index.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,6 +13,14 @@ class MyApp extends StatelessWidget {
     '/': (_) => LoginPage(),
     '/register': (_) => RegisterPage(),
     '/home': (_) => HomePage(),
+    // note
+    // '/note_add': (_) => HomePage(),
+    // '/note_edit': (_) => HomePage(),
+    '/note': (_) => NotePage(),
+    // folder
+    // '/folder_add': (_) => HomePage(),
+    // '/folder_edit': (_) => HomePage(),
+    // '/folder_detail': (_) => HomePage(),
   };
 
   @override

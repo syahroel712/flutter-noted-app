@@ -1,13 +1,86 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({Key key}) : super(key: key);
 
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool pengecekan = true;
+  void checkPassword() {
+    setState(() {
+      pengecekan = !pengecekan;
+    });
+  }
+
+  @override
+  void initState() {
+    getPref();
+    super.initState();
+  }
+
+  var _username = TextEditingController();
+  var _password = TextEditingController();
+
+  void login() async {
+    final res = await http
+        .post('http://noted-app.jualfotocopypadang.com/login.php', body: {
+      'username': _username.text,
+      'password': _password.text,
+    });
+
+    if (res.statusCode == 200) {
+      var data = jsonDecode(res.body);
+      var pesan = data['success'];
+      var userId = data['user_id'];
+      var userNama = data['user_nama'];
+      // showToast(pesan);
+
+      if(userId != null){
+        savePref(pesan, userId, userNama);
+        showToast('Selamat Datang');
+        Navigator.pushReplacementNamed(context, '/home');
+      }else{
+        showToast('Username atau password salah');
+        _username.clear();
+        _password.clear();
+      }
+    }
+  }
+
+  savePref(String pesan, String userId, String userNama) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setString('pesan', pesan);
+    preferences.setString('user_id', userId);
+    preferences.setString('user_nama', userNama);
+    preferences.commit();
+    setState(() {});
+  }
+
+  getPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+    });
+  }
+
+  showToast(msg) {
+    Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP,
+      timeInSecForIosWeb: 5,
+      backgroundColor: Colors.grey,
+      textColor: Colors.white,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,6 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                       child: TextFormField(
+                        controller: _username,
                         decoration: new InputDecoration(
                           labelText: "Enter Email",
                           fillColor: Color(0xFF39A2DB),
@@ -89,9 +163,22 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                       child: TextFormField(
+                        obscureText: pengecekan,
+                        controller: _password,
                         decoration: new InputDecoration(
                           labelText: "Enter Password",
                           fillColor: Color(0xFF39A2DB),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              pengecekan
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              checkPassword();
+                            },
+                          ),
                           border: new OutlineInputBorder(
                             borderRadius: new BorderRadius.circular(25.0),
                             borderSide: new BorderSide(),
@@ -135,18 +222,13 @@ class _LoginPageState extends State<LoginPage> {
                         height: 55,
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, '/home');
+                            login();
                           },
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/home');
-                            },
-                            child: Text(
-                              'Login',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontFamily: 'Poppins-Regular',
-                              ),
+                          child: Text(
+                            'Login',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Poppins-Regular',
                             ),
                           ),
                           style: ElevatedButton.styleFrom(

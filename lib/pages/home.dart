@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({Key key}) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -13,6 +14,17 @@ class _HomePageState extends State<HomePage> {
       6, (index) => {"id": index, "name": "Folder Folder  $index"}).toList();
 
   final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
+
+  logout() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setString('pesan', '');
+    preferences.setString('user_id', '');
+    preferences.setString('user_nama', '');
+    preferences.commit();
+    setState(() {
+      Navigator.pushReplacementNamed(context, '/');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +37,16 @@ class _HomePageState extends State<HomePage> {
           color: const Color(0xff111113),
         ),
         actions: <Widget>[
-          CircleAvatar(
-            radius: 20,
-            backgroundImage:
-                NetworkImage('https://syahroel712.github.io/images/bg-2.jpg'),
-            backgroundColor: Colors.transparent,
+          InkWell(
+            onTap: () {
+              logout();
+            },
+            child: CircleAvatar(
+              radius: 20,
+              backgroundImage:
+                  NetworkImage('https://syahroel712.github.io/images/bg-2.jpg'),
+              backgroundColor: Colors.transparent,
+            ),
           ),
         ],
       ),

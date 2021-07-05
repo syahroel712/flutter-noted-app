@@ -1,6 +1,6 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_noted_app/api/api.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,6 +14,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool pengecekan = true;
+  Api api = Api();
   void checkPassword() {
     setState(() {
       pengecekan = !pengecekan;
@@ -30,8 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   var _password = TextEditingController();
 
   void login() async {
-    final res = await http
-        .post('http://noted-app.jualfotocopypadang.com/login.php', body: {
+    final res = await http.post(Api.url + '/login.php', body: {
       'username': _username.text,
       'password': _password.text,
     });
@@ -43,12 +43,12 @@ class _LoginPageState extends State<LoginPage> {
       var userNama = data['user_nama'];
       // showToast(pesan);
 
-      if(userId != null){
+      if (userId != '') {
         savePref(pesan, userId, userNama);
-        showToast('Selamat Datang');
-        Navigator.pushReplacementNamed(context, '/home');
-      }else{
-        showToast('Username atau password salah');
+        showToast('Welcome...');
+        Navigator.pushReplacementNamed(context, '/splash');
+      } else {
+        showToast('Wrong username or password...');
         _username.clear();
         _password.clear();
       }
@@ -67,6 +67,11 @@ class _LoginPageState extends State<LoginPage> {
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
+      if (preferences.getString("user_id") != '') {
+        Navigator.pushReplacementNamed(context, '/splash');
+      } else {
+        showToast('You are logged out...');
+      }
     });
   }
 
@@ -74,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
     Fluttertoast.showToast(
       msg: msg,
       toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.TOP,
+      gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 5,
       backgroundColor: Colors.grey,
       textColor: Colors.white,

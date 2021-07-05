@@ -15,9 +15,23 @@ class _HomePageState extends State<HomePage> {
 
   final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
 
-  logout() async {
+  var nama;
+  @override
+  void initState() {
+    getPref();
+    super.initState();
+  }
+
+  getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.setString('pesan', '');
+    setState(() {
+      nama = preferences.getString('user_nama');
+    });
+  }
+
+  void logout() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setString('pesan', 'false');
     preferences.setString('user_id', '');
     preferences.setString('user_nama', '');
     preferences.commit();
@@ -37,16 +51,44 @@ class _HomePageState extends State<HomePage> {
           color: const Color(0xff111113),
         ),
         actions: <Widget>[
-          InkWell(
-            onTap: () {
-              logout();
-            },
-            child: CircleAvatar(
-              radius: 20,
-              backgroundImage:
-                  NetworkImage('https://syahroel712.github.io/images/bg-2.jpg'),
-              backgroundColor: Colors.transparent,
+          PopupMenuButton(
+            child: Padding(
+              padding: EdgeInsets.only(right: 15),
+              child: CircleAvatar(
+                radius: 20,
+                backgroundImage: NetworkImage(
+                    'https://syahroel712.github.io/images/bg-2.jpg'),
+                backgroundColor: Colors.transparent,
+              ),
             ),
+            itemBuilder: (BuildContext context) => [
+              PopupMenuItem(
+                value: 'Profile',
+                child: Text(
+                  "Profile",
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              PopupMenuItem(
+                value: 'Logout',
+                child: Text(
+                  "Logout",
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+            onSelected: (value) {
+              if (value.contains('Profile')) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('You pressed profile'),
+                  ),
+                );
+              } else if (value == 'Logout') {
+                logout();
+              }
+            },
+            offset: Offset(0, 50),
           ),
         ],
       ),
@@ -59,7 +101,8 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Text(
-                  'Hello Syahrul',
+                  'Hello $nama',
+                  maxLines: 1,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 35,

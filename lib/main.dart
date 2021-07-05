@@ -3,6 +3,7 @@ import 'package:flutter_noted_app/pages/home.dart';
 import 'package:flutter_noted_app/pages/auth/login.dart';
 import 'package:flutter_noted_app/pages/auth/register.dart';
 import 'package:flutter_noted_app/pages/notes/index.dart';
+import 'package:flutter_noted_app/pages/widgets/splash.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
     '/': (_) => LoginPage(),
     '/register': (_) => RegisterPage(),
     '/home': (_) => HomePage(),
+    '/splash': (_) => SplashWidget(),
     // note
     // '/note_add': (_) => HomePage(),
     // '/note_edit': (_) => HomePage(),
@@ -26,7 +28,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Demo'
+      ,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.white,

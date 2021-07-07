@@ -27,39 +27,39 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
   }
 
-  var _username = TextEditingController();
+  var _email = TextEditingController();
   var _password = TextEditingController();
 
   void login() async {
-    final res = await http.post(Api.url + '/login.php', body: {
-      'username': _username.text,
+    final res = await http.post(Api.url + 'api/login', body: {
+      'email': _email.text,
       'password': _password.text,
     });
-
     if (res.statusCode == 200) {
       var data = jsonDecode(res.body);
-      var pesan = data['success'];
-      var userId = data['user_id'];
-      var userNama = data['user_nama'];
-      // showToast(pesan);
-
+      var token = data['token'];
+      var userId = data['data']['id'].toString();
+      var userNama = data['data']['name'];
+      var userEmail = data['data']['email'];
       if (userId != '') {
-        savePref(pesan, userId, userNama);
+        savePref(token, userId, userNama, userEmail);
         showToast('Welcome...');
         Navigator.pushReplacementNamed(context, '/splash');
       } else {
-        showToast('Wrong username or password...');
-        _username.clear();
+        showToast('Wrong email or password...');
+        _email.clear();
         _password.clear();
       }
     }
   }
 
-  savePref(String pesan, String userId, String userNama) async {
+  savePref(
+      String token, String userId, String userNama, String userEmail) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.setString('pesan', pesan);
-    preferences.setString('user_id', userId);
-    preferences.setString('user_nama', userNama);
+    preferences.setString('token', token);
+    preferences.setString('userId', userId);
+    preferences.setString('userNama', userNama);
+    preferences.setString('userEmail', userEmail);
     preferences.commit();
     setState(() {});
   }
@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      if (preferences.getString("user_id") != '') {
+      if (preferences.getString("userId") != '') {
         Navigator.pushReplacementNamed(context, '/splash');
       } else {
         showToast('You are logged out...');
@@ -137,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                       child: TextFormField(
-                        controller: _username,
+                        controller: _email,
                         decoration: new InputDecoration(
                           labelText: "Enter Email",
                           fillColor: Color(0xFF39A2DB),
@@ -150,18 +150,9 @@ class _LoginPageState extends State<LoginPage> {
                               Radius.circular(20.0),
                             ),
                             borderSide: BorderSide(
-                              color: Color(0xFF39A2DB),
+                              color: Colors.grey,
                             ),
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(20.0),
-                            ),
-                            borderSide: BorderSide(
-                              color: Color(0xFF39A2DB),
-                            ),
-                          ),
-                          //fillColor: Colors.green
                         ),
                       ),
                     ),
@@ -193,18 +184,9 @@ class _LoginPageState extends State<LoginPage> {
                               Radius.circular(20.0),
                             ),
                             borderSide: BorderSide(
-                              color: Color(0xFF39A2DB),
+                              color: Colors.grey,
                             ),
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(20.0),
-                            ),
-                            borderSide: BorderSide(
-                              color: Color(0xFF39A2DB),
-                            ),
-                          ),
-                          //fillColor: Colors.green
                         ),
                       ),
                     ),

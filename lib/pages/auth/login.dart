@@ -50,6 +50,8 @@ class _LoginPageState extends State<LoginPage> {
         _email.clear();
         _password.clear();
       }
+    } else if (res.statusCode == 401) {
+      showToast('Wrong email or password...');
     }
   }
 

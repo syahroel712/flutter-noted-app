@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   var _password = TextEditingController();
 
   void login() async {
-    final res = await http.post(Api.url + 'api/login', body: {
+    final res = await http.post(Uri.parse(Api.url + 'api/login'), body: {
       'email': _email.text,
       'password': _password.text,
     });

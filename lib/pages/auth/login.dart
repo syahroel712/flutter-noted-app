@@ -152,7 +152,15 @@ class _LoginPageState extends State<LoginPage> {
                               Radius.circular(20.0),
                             ),
                             borderSide: BorderSide(
-                              color: Colors.grey,
+                              color: Color(0xFF39A2DB),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20.0),
+                            ),
+                            borderSide: BorderSide(
+                              color: Color(0xFF39A2DB),
                             ),
                           ),
                         ),
@@ -186,7 +194,15 @@ class _LoginPageState extends State<LoginPage> {
                               Radius.circular(20.0),
                             ),
                             borderSide: BorderSide(
-                              color: Colors.grey,
+                              color: Color(0xFF39A2DB),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20.0),
+                            ),
+                            borderSide: BorderSide(
+                              color: Color(0xFF39A2DB),
                             ),
                           ),
                         ),

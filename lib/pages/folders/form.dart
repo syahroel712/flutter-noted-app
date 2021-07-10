@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:html_editor/html_editor.dart';
 
-class NoteFormPage extends StatefulWidget {
-  const NoteFormPage({Key key, this.title}) : super(key: key);
-  final String title;
+class FolderFormPage extends StatefulWidget {
+  const FolderFormPage({Key key}) : super(key: key);
 
   @override
-  _NoteFormPageState createState() => _NoteFormPageState();
+  _FolderFormPageState createState() => _FolderFormPageState();
 }
 
-class _NoteFormPageState extends State<NoteFormPage> {
-  GlobalKey<HtmlEditorState> keyEditor = GlobalKey();
-  String result = "";
+class _FolderFormPageState extends State<FolderFormPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,12 +15,10 @@ class _NoteFormPageState extends State<NoteFormPage> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_rounded, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        actions: <Widget>[],
+            icon: Icon(Icons.arrow_back_rounded, color: Colors.black),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -35,7 +29,7 @@ class _NoteFormPageState extends State<NoteFormPage> {
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: Center(
                   child: Text(
-                    'My Notes',
+                    'My Folders',
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -44,7 +38,7 @@ class _NoteFormPageState extends State<NoteFormPage> {
                 padding: EdgeInsets.only(top: 35, right: 8, left: 8, bottom: 5),
                 child: TextFormField(
                   decoration: InputDecoration(
-                    labelText: "Title",
+                    labelText: "Name",
                     fillColor: Colors.grey,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5.0),
@@ -64,15 +58,6 @@ class _NoteFormPageState extends State<NoteFormPage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-                child: HtmlEditor(
-                  hint: "Description...",
-                  //value: "text content initial, if any",
-                  key: keyEditor,
-                  height: 400,
-                ),
-              ),
-              Padding(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 8),
                 child: Container(
                   color: Colors.transparent,
@@ -88,11 +73,10 @@ class _NoteFormPageState extends State<NoteFormPage> {
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      primary: Color(0xFF39A2DB),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
+                        primary: Color(0xFF39A2DB),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        )),
                   ),
                 ),
               ),

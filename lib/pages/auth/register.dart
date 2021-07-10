@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+  const RegisterPage({Key key}) : super(key: key);
 
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -196,8 +196,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               shape: BoxShape.circle,
                             ),
                             child: IconButton(
-                              icon: Image.network(
-                                  'https://www.freepnglogos.com/uploads/google-logo-png/google-logo-icon-png-transparent-background-osteopathy-16.png'),
+                              icon: Image.asset('images/icons/google.png'),
                               iconSize: 40,
                               onPressed: () {},
                             ),
@@ -212,8 +211,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               shape: BoxShape.circle,
                             ),
                             child: IconButton(
-                              icon: Image.network(
-                                  'https://www.freeiconspng.com/thumbs/facebook-logo-png/facebook-f-logo-transparent-facebook-f-22.png'),
+                              icon: Image.asset('images/icons/facebook.png'),
                               iconSize: 40,
                               onPressed: () {},
                             ),
@@ -228,8 +226,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               shape: BoxShape.circle,
                             ),
                             child: IconButton(
-                              icon: Image.network(
-                                  'https://assets.stickpng.com/images/580b57fcd9996e24bc43c53e.png'),
+                              icon: Image.asset('images/icons/twitter.png'),
                               iconSize: 40,
                               onPressed: () {},
                             ),

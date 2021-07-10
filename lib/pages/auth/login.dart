@@ -1,13 +1,93 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_noted_app/api/api.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({Key key}) : super(key: key);
 
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool pengecekan = true;
+  Api api = Api();
+  void checkPassword() {
+    setState(() {
+      pengecekan = !pengecekan;
+    });
+  }
+
+  @override
+  void initState() {
+    getPref();
+    super.initState();
+  }
+
+  var _email = TextEditingController();
+  var _password = TextEditingController();
+
+  void login() async {
+    final res = await http.post(Uri.parse(Api.url + 'api/login'), body: {
+      'email': _email.text,
+      'password': _password.text,
+    });
+    if (res.statusCode == 200) {
+      var data = jsonDecode(res.body);
+      var token = data['token'];
+      var userId = data['data']['id'].toString();
+      var userNama = data['data']['name'];
+      var userEmail = data['data']['email'];
+      if (userId != '') {
+        savePref(token, userId, userNama, userEmail);
+        showToast('Welcome...');
+        Navigator.pushReplacementNamed(context, '/splash');
+      } else {
+        showToast('Wrong email or password...');
+        _email.clear();
+        _password.clear();
+      }
+    } else if (res.statusCode == 401) {
+      showToast('Wrong email or password...');
+    }
+  }
+
+  savePref(
+      String token, String userId, String userNama, String userEmail) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setString('token', token);
+    preferences.setString('userId', userId);
+    preferences.setString('userNama', userNama);
+    preferences.setString('userEmail', userEmail);
+    preferences.commit();
+    setState(() {});
+  }
+
+  getPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      if (preferences.getString("userId") != '') {
+        Navigator.pushReplacementNamed(context, '/splash');
+      } else {
+        showToast('You are logged out...');
+      }
+    });
+  }
+
+  showToast(msg) {
+    Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 5,
+      backgroundColor: Colors.grey,
+      textColor: Colors.white,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,6 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                       child: TextFormField(
+                        controller: _email,
                         decoration: new InputDecoration(
                           labelText: "Enter Email",
                           fillColor: Color(0xFF39A2DB),
@@ -71,27 +152,31 @@ class _LoginPageState extends State<LoginPage> {
                               Radius.circular(20.0),
                             ),
                             borderSide: BorderSide(
-                              color: Color(0xFF39A2DB),
+                              color: Colors.grey,
                             ),
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(20.0),
-                            ),
-                            borderSide: BorderSide(
-                              color: Color(0xFF39A2DB),
-                            ),
-                          ),
-                          //fillColor: Colors.green
                         ),
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                       child: TextFormField(
+                        obscureText: pengecekan,
+                        controller: _password,
                         decoration: new InputDecoration(
                           labelText: "Enter Password",
                           fillColor: Color(0xFF39A2DB),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              pengecekan
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              checkPassword();
+                            },
+                          ),
                           border: new OutlineInputBorder(
                             borderRadius: new BorderRadius.circular(25.0),
                             borderSide: new BorderSide(),
@@ -101,18 +186,9 @@ class _LoginPageState extends State<LoginPage> {
                               Radius.circular(20.0),
                             ),
                             borderSide: BorderSide(
-                              color: Color(0xFF39A2DB),
+                              color: Colors.grey,
                             ),
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(20.0),
-                            ),
-                            borderSide: BorderSide(
-                              color: Color(0xFF39A2DB),
-                            ),
-                          ),
-                          //fillColor: Colors.green
                         ),
                       ),
                     ),
@@ -135,18 +211,13 @@ class _LoginPageState extends State<LoginPage> {
                         height: 55,
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, '/home');
+                            login();
                           },
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/home');
-                            },
-                            child: Text(
-                              'Login',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontFamily: 'Poppins-Regular',
-                              ),
+                          child: Text(
+                            'Login',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Poppins-Regular',
                             ),
                           ),
                           style: ElevatedButton.styleFrom(
@@ -184,8 +255,7 @@ class _LoginPageState extends State<LoginPage> {
                               shape: BoxShape.circle,
                             ),
                             child: IconButton(
-                              icon: Image.network(
-                                  'https://www.freepnglogos.com/uploads/google-logo-png/google-logo-icon-png-transparent-background-osteopathy-16.png'),
+                              icon: Image.asset('images/icons/google.png'),
                               iconSize: 40,
                               onPressed: () {},
                             ),
@@ -200,8 +270,7 @@ class _LoginPageState extends State<LoginPage> {
                               shape: BoxShape.circle,
                             ),
                             child: IconButton(
-                              icon: Image.network(
-                                  'https://www.freeiconspng.com/thumbs/facebook-logo-png/facebook-f-logo-transparent-facebook-f-22.png'),
+                              icon: Image.asset('images/icons/facebook.png'),
                               iconSize: 40,
                               onPressed: () {},
                             ),
@@ -216,8 +285,7 @@ class _LoginPageState extends State<LoginPage> {
                               shape: BoxShape.circle,
                             ),
                             child: IconButton(
-                              icon: Image.network(
-                                  'https://assets.stickpng.com/images/580b57fcd9996e24bc43c53e.png'),
+                              icon: Image.asset('images/icons/twitter.png'),
                               iconSize: 40,
                               onPressed: () {},
                             ),

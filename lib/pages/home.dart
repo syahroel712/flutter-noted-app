@@ -25,15 +25,16 @@ class _HomePageState extends State<HomePage> {
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      nama = preferences.getString('user_nama');
+      nama = preferences.getString('userNama');
     });
   }
 
   void logout() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.setString('pesan', 'false');
-    preferences.setString('user_id', '');
-    preferences.setString('user_nama', '');
+    preferences.setString('userId', '');
+    preferences.setString('userNama', '');
+    preferences.setString('userEmail', '');
+    preferences.setString('token', '');
     preferences.commit();
     setState(() {
       Navigator.pushReplacementNamed(context, '/');
@@ -57,7 +58,7 @@ class _HomePageState extends State<HomePage> {
               child: CircleAvatar(
                 radius: 20,
                 backgroundImage: NetworkImage(
-                    'https://syahroel712.github.io/images/bg-2.jpg'),
+                    'https://raw.githubusercontent.com/syahroel712/syahroel712.github.io/master/images/bg-1.png'),
                 backgroundColor: Colors.transparent,
               ),
             ),
@@ -250,7 +251,7 @@ class _HomePageState extends State<HomePage> {
                                                         Padding(
                                                           padding: EdgeInsets
                                                               .symmetric(
-                                                                  vertical: 10),
+                                                                  vertical: 14),
                                                           child: Text(
                                                             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse aliquet id massa nec placerat. Etiam vitae dui vel sapien scelerisque dapibus sed ut quam. Sed elementum libero vel ex fringilla cursus. Nulla sagittis, ligula in ultrices tristique, neque enim semper purus, eu placerat mauris ante eu nisi. Pellentesque accumsan ex massa, id hendrerit justo sodales sit amet. Praesent porta a libero at tempus. Cras at pulvinar nibh. Aliquam ac congue felis. ',
                                                             maxLines: 7,
@@ -266,7 +267,7 @@ class _HomePageState extends State<HomePage> {
                                                         Padding(
                                                           padding:
                                                               EdgeInsets.only(
-                                                                  top: 9.5),
+                                                                  top: 1.5),
                                                           child: Row(
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
@@ -351,7 +352,7 @@ class _HomePageState extends State<HomePage> {
                                                         Padding(
                                                           padding: EdgeInsets
                                                               .symmetric(
-                                                                  vertical: 10),
+                                                                  vertical: 12),
                                                           child: Text(
                                                             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse aliquet id massa nec placerat. Etiam vitae dui vel sapien scelerisque dapibus sed ut quam. Sed elementum libero vel ex fringilla cursus. Nulla sagittis, ligula in ultrices tristique, neque enim semper purus, eu placerat mauris ante eu nisi. Pellentesque accumsan ex massa, id hendrerit justo sodales sit amet. Praesent porta a libero at tempus. Cras at pulvinar nibh. Aliquam ac congue felis. ',
                                                             maxLines: 5,
@@ -367,7 +368,7 @@ class _HomePageState extends State<HomePage> {
                                                         Padding(
                                                           padding:
                                                               EdgeInsets.only(
-                                                                  top: 5.5),
+                                                                  top: 0),
                                                           child: Row(
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
@@ -430,79 +431,85 @@ class _HomePageState extends State<HomePage> {
                                         itemCount: myFolder.length,
                                         itemBuilder: (context, index) {
                                           return Container(
-                                            child: Card(
-                                              elevation: 3,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                              ),
-                                              shadowColor: Color(0xFF39A2DB),
-                                              child: Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: 8,
-                                                  vertical: 20,
+                                            child: InkWell(
+                                              onTap: () {
+                                                Navigator.pushNamed(
+                                                    context, '/folder');
+                                              },
+                                              child: Card(
+                                                elevation: 3,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
                                                 ),
-                                                child: Center(
-                                                  child: Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 10),
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        // title
-                                                        Container(
-                                                          child: Padding(
-                                                            padding: EdgeInsets
-                                                                .symmetric(
-                                                                    vertical:
-                                                                        10),
-                                                            child: ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          20),
-                                                              child: Center(
-                                                                child:
-                                                                    Image.asset(
-                                                                  'images/icons/folder.png',
-                                                                  width: MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .width /
-                                                                      3.6,
-                                                                  fit: BoxFit
-                                                                      .fitWidth,
+                                                shadowColor: Color(0xFF39A2DB),
+                                                child: Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 8,
+                                                    vertical: 20,
+                                                  ),
+                                                  child: Center(
+                                                    child: Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              vertical: 10),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          // title
+                                                          Container(
+                                                            child: Padding(
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      vertical:
+                                                                          10),
+                                                              child: ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            20),
+                                                                child: Center(
+                                                                  child: Image
+                                                                      .asset(
+                                                                    'images/icons/folder.png',
+                                                                    width: MediaQuery.of(context)
+                                                                            .size
+                                                                            .width /
+                                                                        3.6,
+                                                                    fit: BoxFit
+                                                                        .fitWidth,
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),
                                                           ),
-                                                        ),
-                                                        Center(
-                                                          child: Container(
-                                                            height: 35,
-                                                            child: Text(
-                                                              myFolder[index]
-                                                                  ["name"],
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                fontSize: 16,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
+                                                          Center(
+                                                            child: Container(
+                                                              height: 35,
+                                                              child: Text(
+                                                                myFolder[index]
+                                                                    ["name"],
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                                maxLines: 2,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
                                                               ),
-                                                              maxLines: 2,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
                                                             ),
                                                           ),
-                                                        ),
-                                                      ],
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -523,8 +530,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-
-              // Add note button
             ],
           ),
         ),
@@ -563,11 +568,7 @@ class _HomePageState extends State<HomePage> {
                 minWidth: 65,
               ),
               onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('You '),
-                  ),
-                );
+                Navigator.pushNamed(context, '/folder_add');
               },
               shape: CircleBorder(),
               padding: const EdgeInsets.all(0.0),
@@ -586,11 +587,7 @@ class _HomePageState extends State<HomePage> {
                 minWidth: 65,
               ),
               onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('You pressed buy1'),
-                  ),
-                );
+                Navigator.pushNamed(context, '/note_add');
               },
               shape: CircleBorder(),
               padding: const EdgeInsets.all(0.0),

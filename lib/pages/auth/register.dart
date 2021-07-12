@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_noted_app/api/api.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key key}) : super(key: key);
@@ -8,6 +13,54 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  Api api = Api();
+  bool pengecekan = true;
+  void checkPassword() {
+    setState(() {
+      pengecekan = !pengecekan;
+    });
+  }
+
+  var _name = TextEditingController();
+  var _email = TextEditingController();
+  var _password = TextEditingController();
+
+  void register() async {
+    final res = await http.post(Uri.parse(Api.url + 'api/register'), body: {
+      'name': _name.text,
+      'email': _email.text,
+      'password': _password.text,
+    });
+    var data = jsonDecode(res.body);
+    if (res.statusCode == 201) {
+      showToast(data['message']);
+    } else if (res.statusCode == 422) {
+      if (_name.text == '') {
+        showToast(data['data']['name'][0]);
+      }
+
+      if (_email.text == '') {
+        showToast(data['data']['email'][0]);
+      } else if (data['data']['email'][0] != '') {
+        showToast(data['data']['email'][0]);
+      }
+
+      if (_password.text == '') {
+        showToast(data['data']['password'][0]);
+      }
+    }
+  }
+
+  showToast(msg) {
+    Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.grey,
+        textColor: Colors.white);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,6 +111,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                       child: TextFormField(
+                        controller: _name,
                         decoration: new InputDecoration(
                           labelText: "Enter Name",
                           fillColor: Color(0xFF39A2DB),
@@ -88,6 +142,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                       child: TextFormField(
+                        controller: _email,
                         decoration: new InputDecoration(
                           labelText: "Enter Email",
                           fillColor: Color(0xFF39A2DB),
@@ -118,9 +173,22 @@ class _RegisterPageState extends State<RegisterPage> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                       child: TextFormField(
+                        obscureText: pengecekan,
+                        controller: _password,
                         decoration: new InputDecoration(
                           labelText: "Enter Password",
                           fillColor: Color(0xFF39A2DB),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              pengecekan
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              checkPassword();
+                            },
+                          ),
                           border: new OutlineInputBorder(
                             borderRadius: new BorderRadius.circular(25.0),
                             borderSide: new BorderSide(),
@@ -153,7 +221,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         width: MediaQuery.of(context).size.width,
                         height: 55,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            register();
+                          },
                           child: Text(
                             'Register',
                             style: TextStyle(
